@@ -1,0 +1,133 @@
+\section*{\centering Теоретичні відомості}
+
+Основна задача даного лабораторного практикуму полягає у тому,
+щоб дослідити методи розв'язання нелінійних рівнянь:
+\[
+    f(x) = 0
+\]
+, де $f(x)$ - неперервна, та для деяких методів дифференційовна функція.
+Розв'язання даної задачі вимагає виконання 2 етапів:
+\begin{enumerate}
+    \item Відокремлення коренів - визначення проміжків $[a_i, b_i]$, у
+    яких знаходиться лише 1 корінь.
+    \item Уточнення кореня у кожному з проміжків, знайденних на попередному етапі.
+\end{enumerate}
+Для поліномів, тобто функції вигляду:
+\begin{equation} \label{th:polynomial}
+    f(x) = \sum\limits_{i=0}^n a_n x^n = a_0 + a_1x + \dots + a_nx^n
+\end{equation}
+задача значно спрощується, бо мають місце теореми, які дозволяють
+оцінити значення коренів рівняння та відділити їх. Розглянемо деякі з них.
+
+\begin{theorem}[про границі усіх коренів рівняння] \label{th:bounds}
+    Нехай $A = \max |a_i|, i = \overline{0, n-1}$ та
+    $A = \max |a_i|, i = \overline{1, n}$.
+    Тоді всі корені рівняння \ref{th:polynomial} лежать у кільці:
+    \[
+        \frac{|a_0|}{B + |a_0|} \leq |x| \leq \frac{|a_n|+A}{|a_n|}
+    \]
+\end{theorem}
+
+\begin{theorem}[Гюа] \label{th:gua}
+    Якщо
+    $ \exists k \in \overline{1, n-1} \; : a^2_k < a_{k-1} a_{k+1} $
+    ,то рівняння \ref{th:polynomial} має хоча б одну пару комплексноспряжених коренів.
+\end{theorem}
+
+\begin{theorem}[про верхню межу додатніх коренів] \label{th:upper_bound}
+    Нехай $B = \max |a_i|, a_i < 0$ та
+    $m = \max i, a_i < 0 $.
+    Тоді верхня межа додатніх коренів рівняння \ref{th:polynomial}:
+    \[
+        R = 1 + \sqrt[n-m]{\frac{B}{a_n}}
+    \]
+\end{theorem}
+
+\begin{corollary}
+    Очевидно що, якщо обрахувати значення $R_1$, $R_2$, $R_3$ та $R_4$,
+    вважаючи за аргумент вирази $x$, $\dfrac{1}{y}$, $-\dfrac{1}{y}$, $-y$, то
+    будуть мати місце наступні оцінки:
+    \[
+        \frac{1}{R_2} \leq x^{+} \leq R_1 \hspace{1cm}
+        -R_4 \leq x^{-} \leq -\frac{1}{R_3}
+    \]
+\end{corollary}
+
+\begin{corollary}[Спосіб Лагранжа] \label{th:lagrange}
+    Нехай $f(x) = F(x) + H(x)$, причому $F(x)$
+    містить усі поспіль старші члени $f$ з $a_i > 0$,
+    а також усі члени, для яких $a_i < 0$, а $H(x)$
+    усі інші члени. Тоді, якщо існує таке $\alpha>0$,
+    що $F(\alpha) > 0$, то для коренів $x_r$ рівняння
+    $f$ виконується: $x_r < \alpha$.
+\end{corollary}
+
+\begin{theorem}[Штурма] \label{th:sturm}
+    Нехай $f(x) = P_n(x)$ поліном без кратних коренів. Утворимо послідовність
+    многочленів:
+    \[
+        p_0(x) = f(x) \hspace{1cm}
+        p_1(x) = f^{'}(x) \hspace{1cm}
+        p_{i+1} = - (p_{i-1} \mod{p_i})
+    \]
+    Тоді кількість дійсних коренів полінома $f(x)$ на довільному відрізку $[a, b]$
+    дорівнює різниці між кількістю змін знаку у цій послідовності при $x=a$ та $x=b$.
+\end{theorem}
+
+Для того, щоб приблизно обчислити значення кореня у
+визначеному проміжку будемо використовувати наступні методи.
+
+\begin{algorithm}[H] \label{alg:bisection}
+    \SetAlgoLined
+    \KwIn{$f$, $a$, $b$, $\varepsilon$}
+    \While{$\varepsilon < |b-a|$}
+    {
+        $ c = \dfrac{a+b}{2} $\;
+
+        \eIf{f(c)f(a) > 0}
+        {
+            $a \leftarrow c$\;
+        }
+        {
+            $b \leftarrow c$\;
+        }
+    }
+    \KwOut{$c$}
+ \caption{Метод бісекцій}
+\end{algorithm}
+
+\begin{algorithm}[H] \label{alg:newton}
+    \SetAlgoLined
+    \KwIn{$f$, $x_0$, $\varepsilon$}
+    $x_k \leftarrow x_0 $\;
+    \While{$\varepsilon < f(x_k)$}
+    {
+        $x_{k+1} = x_k - \dfrac{f^{'}(x_k)}{f(x_k)}$ \;
+    }
+    \KwOut{$x_k$}
+ \caption{Метод Ньютона}
+\end{algorithm}
+
+
+\begin{algorithm}[H] \label{alg:secant}
+    \SetAlgoLined
+    \KwIn{$f$, $a$, $b$, $\varepsilon$}
+    \While{$\varepsilon < f(c)$}
+    {
+        $ c = \dfrac{af(b) - bf(a)}{f(b)-f(a)} $\;
+
+        \eIf{f(c)f(a) > 0}
+        {
+            $a \leftarrow c$\;
+        }
+        {
+            $b \leftarrow c$\;
+        }
+    }
+    \KwOut{$c$}
+ \caption{Метод хорд}
+\end{algorithm}
+
+% Для успішної роботи методу рекомендовано, щоб на відрізку,
+% який містить шуканий корінь,
+% функція була монотонна та друга її похідна не змінювала знак.

@@ -259,13 +259,18 @@ paket-files/
 # Python Tools for Visual Studio (PTVS)
 __pycache__/
 *.pyc
+
 **/build
 **/Web/db
 .ipynb*
+
 Data \Science/**/data
 Data Science/Satellite/scripts
 Data Science/Satellite/Dockerfile
+
+# Latex
 *.synctex.gz
 *.aux
 *.fls
 *.fdb_latexmk
+*.out

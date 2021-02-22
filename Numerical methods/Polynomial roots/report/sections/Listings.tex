@@ -1,0 +1,31 @@
+\section*{\centering Додатки}
+
+\definecolor{deepblue}{rgb}{0,0,0.5}
+\definecolor{deepred}{rgb}{0.6,0,0}
+\definecolor{deepgreen}{rgb}{0,0.5,0}
+
+\lstset{
+    breaklines=true,
+    postbreak=\mbox{\textcolor{red}{$\hookrightarrow$}\space},
+    otherkeywords={self},
+    keywordstyle=\color{deepblue},
+    % emph={MyClass,__init__, @abstractmethod, @property},
+    emphstyle=\color{deepred},
+    stringstyle=\color{deepgreen},
+    showstringspaces=false
+}
+
+Далі наведено програмний код імплементованих алгоритмів.
+Вихідний код, який було створено для даного практикума
+(у тому числі \LaTeX),
+у повному обсязі можна знайти за наступним
+\href{https://colab.research.google.com/drive/139J6V_hXOcZL_K_-qSM1CSk3T0zTmQM9?usp=sharing}{посиланням}:
+
+\subsubsection*{Метод бісекцій}
+\lstinputlisting[language=python]{../code/bisection.py}
+
+\subsubsection*{Метод Ньютона}
+\lstinputlisting[language=python]{../code/newton.py}
+
+\subsubsection*{Метод хорд}
+\lstinputlisting[language=python]{../code/secant.py}
