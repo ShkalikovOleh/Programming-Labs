@@ -8,6 +8,7 @@
 3. Алгоритмы и структуры данных
 4. Специальные разделы программирования(наука о данных)
 5. Математическое моделирование
+6. Численные методы
 
 Используйте размещенные здесь материалы **исключительно** для проверки написанных вами решений.
 
@@ -63,6 +64,14 @@
 - [LTI. ZPK, TF, SS representation](https://github.com/ShkalikovOleh/Programming-Labs/blob/master/Math%20modeling/Lab%202.ipynb)
 - [Nonlinear oscillators](https://github.com/ShkalikovOleh/Programming-Labs/blob/master/Math%20modeling/Lab%203.ipynb)
 - [Petri network](https://github.com/ShkalikovOleh/Programming-Labs/blob/master/Math%20modeling/Lab%204/report/report.pdf)
+
+## Numerical methods
+
+Курс численных методов. Рассмотрены, имплементированы и реализованы самые простые алгоритмы численно решения
+разного рода уравнений. Часть работ выполнена в интерактивных [Jupyter Notebook](https://jupyter.org/).
+
+- [Polynomial roots](https://github.com/ShkalikovOleh/Programming-Labs/blob/master/Numerical%20methods/Polynomial%20roots/report/report.pdf)
+
 ## Ошибки и неточности
 Если Вы заметили какую-либо ошибку или неточность, то оставьте пожелуйста сообщений о ней, создав соответвующий issue с точным ее описанием, порядком выполнения действий для воспроизведения и "целевым" файлом.
 
