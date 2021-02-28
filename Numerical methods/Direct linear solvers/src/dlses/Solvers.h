@@ -15,4 +15,20 @@ namespace DLSES
         auto x = backward(chol.transpose(), z);
         return x;
     }
+
+    template <typename T>
+    Vector<T> ldlSolve(const Matrix<T> &A, const Vector<T> &b)
+    {
+        auto [l, d] = ldl(A);
+        auto z = forward(l, b);
+
+        Vector<T> y(z.nval());
+        for (size_t i = 0; i < z.nval(); i++)
+        {
+            y(i) = z(i) / d(i);
+        }
+
+        auto x = backward(l.transpose(), y);
+        return x;
+    }
 }

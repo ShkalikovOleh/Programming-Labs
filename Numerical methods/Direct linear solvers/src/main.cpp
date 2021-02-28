@@ -45,11 +45,17 @@ int main()
     vec(2) = 33;
     vec(3) = 31;
 
-    auto x = choleckySolve(mat, vec);
-    std::cout << "Roots" << std::endl;
-    print_vector(x);
+    auto xch = choleckySolve(mat, vec);
+    std::cout << "Roots Cholecky" << std::endl;
+    print_vector(xch);
+    std::cout << std::endl;
 
-    DLSES::Vector<double> res = mat * x;
+    auto xld = ldlSolve(mat, vec);
+    std::cout << "Roots LDL" << std::endl;
+    print_vector(xld);
+    std::cout << std::endl;
+
+    DLSES::Vector<double> res = mat * xld;
     std::cout << "Check" << std::endl;
     print_vector(res);
 
