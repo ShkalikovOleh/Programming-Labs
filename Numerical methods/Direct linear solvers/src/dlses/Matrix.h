@@ -65,6 +65,9 @@ namespace DLSES
     template <typename T>
     bool Matrix<T>::isSymmetric() const noexcept
     {
+        if (_ncol != _nrow)
+            return false;
+
         for (size_t i = 0; i < _nrow; i++)
         {
             for (size_t j = 0; j < i; j++)

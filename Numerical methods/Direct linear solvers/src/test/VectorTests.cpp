@@ -46,7 +46,7 @@ TEST_F(VectorTests, sum)
     EXPECT_EQ(sum.nval(), vec.nval());
     for (int i = 0; i < sum.nval(); i++)
     {
-        EXPECT_EQ(sum(i), 2*vec(i));
+        EXPECT_EQ(sum(i), 2 * vec(i));
     }
 }
 
