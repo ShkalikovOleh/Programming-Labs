@@ -1,5 +1,6 @@
 #pragma once
 
+#include <unordered_set>
 #include "Buffer.h"
 #include "Vector.h"
 
@@ -14,7 +15,7 @@ namespace DLSES
         size_t nrow() const noexcept { return _nrow; }
         size_t ncol() const noexcept { return _ncol; }
 
-        T& operator()(size_t i, size_t j);
+        T &operator()(size_t i, size_t j);
         const T& operator()(size_t i, size_t j) const;
 
         Matrix transpose() const;
@@ -70,9 +71,9 @@ namespace DLSES
             {
                 if (operator()(i, j) != operator()(j, i))
                     return false;
-
             }
         }
+
         return true;
     }
 

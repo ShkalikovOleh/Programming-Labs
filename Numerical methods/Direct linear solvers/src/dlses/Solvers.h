@@ -2,13 +2,13 @@
 
 #include "Matrix.h"
 #include "Vector.h"
-#include "Cholecky.h"
+#include "Cholesky.h"
 #include "Substitution.h"
 
 namespace DLSES
 {
     template <typename T>
-    Vector<T> choleckySolve(const Matrix<T> &A, const Vector<T> &b)
+    Vector<T> choleskySolve(const Matrix<T> &A, const Vector<T> &b)
     {
         auto chol = cholesky(A);
         auto z = forward(chol, b);
@@ -22,13 +22,12 @@ namespace DLSES
         auto [l, d] = ldl(A);
         auto z = forward(l, b);
 
-        Vector<T> y(z.nval());
         for (size_t i = 0; i < z.nval(); i++)
         {
-            y(i) = z(i) / d(i);
+            z(i) = z(i) / d(i);
         }
 
-        auto x = backward(l.transpose(), y);
+        auto x = backward(l.transpose(), z);
         return x;
     }
 }

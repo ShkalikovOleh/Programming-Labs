@@ -5,7 +5,7 @@
 #include "Solvers.h"
 
 template <typename T>
-void print_matrix(const DLSES::Matrix<T> &matrix)
+void print(const DLSES::Matrix<T> &matrix)
 {
     for (size_t i = 0; i < matrix.nrow(); i++)
     {
@@ -18,7 +18,7 @@ void print_matrix(const DLSES::Matrix<T> &matrix)
 }
 
 template <typename T>
-void print_vector(const DLSES::Vector<T> &vector)
+void print(const DLSES::Vector<T> &vector)
 {
     for (size_t i = 0; i < vector.nval(); i++)
     {
@@ -37,7 +37,9 @@ int main()
     mat(2, 0) = mat(0,2) = 6.0;
     mat(3, 2) = mat(2,3) = 9.0;
 
-    //print_matrix(mat);
+    std::cout << "Matrix A" << std::endl;
+    print(mat);
+    std::cout << std::endl;
 
     DLSES::Vector<double> vec(4);
     vec(0) = 23;
@@ -45,19 +47,23 @@ int main()
     vec(2) = 33;
     vec(3) = 31;
 
-    auto xch = choleckySolve(mat, vec);
-    std::cout << "Roots Cholecky" << std::endl;
-    print_vector(xch);
+    std::cout << "Vector b" << std::endl;
+    print(vec);
+    std::cout << std::endl;
+
+    auto xch = choleskySolve(mat, vec);
+    std::cout << "Roots cholesky" << std::endl;
+    print(xch);
     std::cout << std::endl;
 
     auto xld = ldlSolve(mat, vec);
     std::cout << "Roots LDL" << std::endl;
-    print_vector(xld);
+    print(xld);
     std::cout << std::endl;
 
     DLSES::Vector<double> res = mat * xld;
-    std::cout << "Check" << std::endl;
-    print_vector(res);
+    std::cout << "A*x" << std::endl;
+    print(res);
 
     return 0;
 }

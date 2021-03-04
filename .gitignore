@@ -274,3 +274,6 @@ Data Science/Satellite/Dockerfile
 *.fls
 *.fdb_latexmk
 *.out
+
+#VS Code
+.vscode

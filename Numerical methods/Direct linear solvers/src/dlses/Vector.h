@@ -1,5 +1,6 @@
 #pragma once
 
+#include <cmath>
 #include "Buffer.h"
 
 namespace DLSES
@@ -15,7 +16,7 @@ namespace DLSES
         T& operator()(size_t i);
         const T& operator()(size_t i) const;
 
-        Vector reverse() const;
+        auto norm() const noexcept;
 
     private:
         Buffer<T> _buff;
@@ -38,17 +39,14 @@ namespace DLSES
     }
 
     template <typename T>
-    Vector<T> Vector<T>::reverse() const
+    auto Vector<T>::norm() const noexcept
     {
-        auto size = _buff.size();
-        Vector<T> result(size);
-
-        for (size_t i = 0; i < size; i++)
+        T sum = 0;
+        for (size_t i = 0; i < _buff.size(); i++)
         {
-            result(size - i -1) = _buff[i];
+            sum += _buff[i] * _buff[i];
         }
-
-        return result;
+        return std::sqrt(sum);
     }
 
     template <typename T>
