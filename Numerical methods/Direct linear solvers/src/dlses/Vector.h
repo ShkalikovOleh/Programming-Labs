@@ -49,13 +49,13 @@ namespace DLSES
         return std::sqrt(sum);
     }
 
-    template <typename T>
-    Vector<T> operator+(const Vector<T> &rhs, const Vector<T> &lhs)
+    template <typename T, typename U>
+    auto operator+(const Vector<T> &rhs, const Vector<U> &lhs)
     {
         if (rhs.nval() != lhs.nval())
             throw std::invalid_argument("Different size");
 
-        Vector<T> result(rhs.nval());
+        Vector<typename std::common_type<T, U>::type> result(rhs.nval());
         for (size_t i = 0; i < rhs.nval(); i++)
         {
             result(i) = rhs(i) + lhs(i);
@@ -63,13 +63,13 @@ namespace DLSES
         return result;
     }
 
-    template <typename T>
-    Vector<T> operator-(const Vector<T> &rhs, const Vector<T> &lhs)
+    template <typename T, typename U>
+    auto operator-(const Vector<T> &rhs, const Vector<U> &lhs)
     {
         if (rhs.nval() != lhs.nval())
             throw std::invalid_argument("Different size");
 
-        Vector<T> result(rhs.nval());
+        Vector<typename std::common_type<T, U>::type> result(rhs.nval());
         for (size_t i = 0; i < rhs.nval(); i++)
         {
             result(i) = rhs(i) - lhs(i);

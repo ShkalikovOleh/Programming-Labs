@@ -1,6 +1,5 @@
 #pragma once
 
-#include <unordered_set>
 #include "Buffer.h"
 #include "Vector.h"
 
@@ -80,13 +79,13 @@ namespace DLSES
         return true;
     }
 
-    template <typename T>
-    Matrix<T> operator*(const DLSES::Matrix<T> &rhs, const DLSES::Matrix<T> &lhs)
+    template <typename T, typename U>
+    auto operator*(const DLSES::Matrix<T> &rhs, const DLSES::Matrix<U> &lhs)
     {
         if (rhs.ncol() != lhs.nrow())
             throw std::invalid_argument("Number of column != number of row");
 
-        Matrix<T> result(rhs.nrow(), lhs.ncol());
+        Matrix<typename std::common_type<T, U>::type> result(rhs.nrow(), lhs.ncol());
 
         for (size_t i = 0; i < rhs.nrow(); i++)
         {
@@ -102,13 +101,13 @@ namespace DLSES
         return result;
     }
 
-    template <typename T>
-    Vector<T> operator*(const Matrix<T> &matrix, const Vector<T> &vector)
+    template <typename T, typename U>
+    auto operator*(const Matrix<T> &matrix, const Vector<U> &vector)
     {
         if (matrix.ncol() != vector.nval())
             throw std::invalid_argument("Number of column != size of vector");
 
-        Vector<T> result(matrix.nrow());
+        Vector<typename std::common_type<T, U>::type> result(matrix.nrow());
 
         for (size_t i = 0; i < matrix.nrow(); i++)
         {
