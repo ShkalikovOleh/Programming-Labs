@@ -5,13 +5,13 @@
 
 namespace DLSES
 {
-    template <typename T>
-    Vector<T> forward(const Matrix<T> &A, const Vector<T> &b)
+    template <typename T, typename U>
+    auto forward(const Matrix<T> &A, const Vector<U> &b)
     {
         if (A.nrow() != b.nval() || A.ncol() != b.nval())
             throw std::invalid_argument("Invalid sizes");
 
-        Vector<T> x(b.nval());
+        Vector<typename std::common_type<T, U>::type> x(b.nval());
 
         for (size_t i = 0; i < A.nrow(); i++)
         {
@@ -26,13 +26,13 @@ namespace DLSES
         return x;
     }
 
-    template <typename T>
-    Vector<T> backward(const Matrix<T> &A, const Vector<T> &b)
+    template <typename T, typename U>
+    auto backward(const Matrix<T> &A, const Vector<U> &b)
     {
         if (A.nrow() != b.nval() || A.ncol() != b.nval())
             throw std::invalid_argument("Invalid sizes");
 
-        Vector<T> x(b.nval());
+        Vector<typename std::common_type<T, U>::type> x(b.nval());
 
         size_t i = A.nrow();
         do

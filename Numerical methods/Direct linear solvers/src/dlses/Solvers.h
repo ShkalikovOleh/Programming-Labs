@@ -7,8 +7,8 @@
 
 namespace DLSES
 {
-    template <typename T>
-    Vector<T> choleskySolve(const Matrix<T> &A, const Vector<T> &b)
+    template <typename T, typename U>
+    auto choleskySolve(const Matrix<T> &A, const Vector<U> &b)
     {
         auto chol = cholesky(A);
         auto z = forward(chol, b);
@@ -16,8 +16,8 @@ namespace DLSES
         return x;
     }
 
-    template <typename T>
-    Vector<T> ldlSolve(const Matrix<T> &A, const Vector<T> &b)
+    template <typename T, typename U>
+    auto ldlSolve(const Matrix<T> &A, const Vector<U> &b)
     {
         auto [l, d] = ldl(A);
         auto z = forward(l, b);
