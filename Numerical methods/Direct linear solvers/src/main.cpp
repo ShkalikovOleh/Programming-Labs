@@ -1,31 +1,10 @@
 #include <iostream>
+#include <iomanip>
 
 #include "Matrix.h"
 #include "Vector.h"
 #include "Solvers.h"
-
-template <typename T>
-void print(const DLSES::Matrix<T> &matrix)
-{
-    for (size_t i = 0; i < matrix.nrow(); i++)
-    {
-        for (size_t j = 0; j < matrix.ncol(); j++)
-        {
-            std::cout << matrix(i, j) << "\t";
-        }
-        std::cout << std::endl;
-    }
-}
-
-template <typename T>
-void print(const DLSES::Vector<T> &vector)
-{
-    for (size_t i = 0; i < vector.nval(); i++)
-    {
-        std::cout << vector(i) << "\t";
-    }
-    std::cout << std::endl;
-}
+#include "Utils.h"
 
 int main()
 {
@@ -51,6 +30,8 @@ int main()
     print(vec);
     std::cout << std::endl;
 
+    std::cout << std::fixed << std::setprecision(6); //specify precision
+
     auto xch = choleskySolve(mat, vec);
     std::cout << "Roots cholesky" << std::endl;
     print(xch);
@@ -61,8 +42,8 @@ int main()
     print(xld);
     std::cout << std::endl;
 
-    DLSES::Vector<double> res = mat * xld;
-    std::cout << "A*x" << std::endl;
+    DLSES::Vector<double> res = mat * xld - vec;
+    std::cout << "A*x - b" << std::endl;
     print(res);
 
     return 0;

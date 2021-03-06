@@ -4,6 +4,10 @@
 #include <tuple>
 #include "Matrix.h"
 
+#ifdef PRINT
+    #include "Utils.h"
+#endif
+
 namespace DLSES
 {
     template <typename T>
@@ -30,6 +34,12 @@ namespace DLSES
                 else
                     result(i,j) = (matrix(i,j) - sum) / result(j,j);
             }
+
+#ifdef PRINT
+            std::cout << "Cholesky decomposition. Step: " << i+1 << std::endl;
+            print(result);
+            std::cout << std::endl;
+#endif
         }
 
         return result;
@@ -65,6 +75,16 @@ namespace DLSES
                     l(i,j) = (matrix(i,j) - sum) / d(j);
                 }
             }
+
+#ifdef PRINT
+            std::cout << "LDL decomposition. Step: " << i+1 << std::endl;
+            std::cout << "L:" << std::endl;
+            print(l);
+            std::cout << std::endl;
+            std::cout << "D:" << std::endl;
+            print(d);
+            std::cout << std::endl;
+#endif
         }
 
         return std::make_tuple(l, d);
