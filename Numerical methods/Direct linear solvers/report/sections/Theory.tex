@@ -1,0 +1,72 @@
+\section*{\centering Теоретичні відомості}
+
+\begin{algorithm}[h]
+    \SetAlgoLined
+    \KwIn{$A$}
+    \For{$i \in \overline{1, n}$}
+    {
+        \For{$j \in \overline{1, n}$}
+        {
+            \If{i = j}
+            {
+                $l_{i, j} \leftarrow \sqrt{a_{i,i} - \sum \limits_{k=1}^{i-1} l_{i, k}^2} $
+            }
+            \Else
+            {
+                $l_{i, j} \leftarrow \dfrac{a_{i, j} - \sum \limits_{k=1}^{i-1} l_{i, k} l_{j, k}}{l_{i, j}} $
+            }
+        }
+    }
+    \KwOut{$L$}
+    \caption{Декомпозиція Холецького}
+    \label{alg:cholesky}
+\end{algorithm}
+
+\begin{algorithm}[h]
+    \SetAlgoLined
+    \KwIn{$A$}
+    \For{$i \in \overline{1, n}$}
+    {
+        \For{$j \in \overline{1, n}$}
+        {
+            \If{i = j}
+            {
+                $l_{i, i} \leftarrow 1$ \\
+                $d_{i} \leftarrow a_{i,i} - \sum \limits_{k=1}^{i-1} l_{i, k}^2 l_k $
+            }
+            \Else
+            {
+                $l_{i, j} \leftarrow \dfrac{a_{i, j} - \sum \limits_{k=1}^{i-1} l_{i, k} l_{j, k} d_k}{d_{j}} $
+            }
+        }
+    }
+    \KwOut{$L$}
+    \caption{LDL декомпозиція}
+    \label{alg:ldl}
+\end{algorithm}
+
+\begin{algorithm}[h]
+    \SetAlgoLined
+    \KwIn{$A$, $b$}
+    $x_1 \leftarrow \dfrac{b_1}{a_{1,1}} $ \\
+    \For{$i \in \overline{2, n}$}
+    {
+        $x_i \leftarrow \dfrac{b_i - \sum \limits_{j=1}^{i-1} a_{i, j}x_j}{a_{i,i}}$
+    }
+    \KwOut{$x$}
+    \caption{Пряма підстановка(для нижньо-трикутної матриці)}
+    \label{alg:forward}
+\end{algorithm}
+
+\begin{algorithm}[h]
+    \SetAlgoLined
+    \KwIn{$A$, $b$}
+    $x_n \leftarrow \dfrac{b_n}{a_{n,n}} $ \\
+    \For{$i \in \{n-1, \dots, 1\}$}
+    {
+        $x_i \leftarrow \dfrac{b_i - \sum \limits_{j=i+1}^{n} a_{i, j}x_{j}}{a_{i,i}}$
+    }
+    \KwOut{$x$}
+    \caption{Зворотна підстановка(для верхньо-трикутної матриці)}
+    \label{alg:backward}
+\end{algorithm}

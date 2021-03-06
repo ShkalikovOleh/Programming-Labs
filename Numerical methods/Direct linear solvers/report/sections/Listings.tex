@@ -1,0 +1,40 @@
+\section*{\centering Додатки}
+
+\definecolor{deepblue}{rgb}{0,0,0.5}
+\definecolor{deepred}{rgb}{0.6,0,0}
+\definecolor{deepgreen}{rgb}{0,0.5,0}
+
+\lstset{
+    breaklines=true,
+    postbreak=\mbox{\textcolor{red}{$\hookrightarrow$}\space},
+    basicstyle=\ttfamily,
+    keywordstyle=\color{blue}\ttfamily,
+    stringstyle=\color{red}\ttfamily,
+    commentstyle=\color{green}\ttfamily,
+    morecomment=[l][\color{magenta}]{\#}
+    showstringspaces=false
+}
+
+Далі наведено програмний код імплементованих алгоритмів.
+Вихідний код, який було створено для даного практикума
+(у тому числі \LaTeX),
+можна знайти за наступним
+\href{https://github.com/ShkalikovOleh/Programming-Labs}{посиланням}.
+
+\subsubsection*{Класс для інкупсуляції роботи з пам'ятю}
+\lstinputlisting[language=C++]{../src/dlses/Buffer.h}
+
+\subsubsection*{Клас векторів}
+\lstinputlisting[language=C++]{../src/dlses/Vector.h}
+
+\subsubsection*{Клас матриць}
+\lstinputlisting[language=C++]{../src/dlses/Matrix.h}
+
+\subsubsection*{Декомпозиція Схолецького та LDL}
+\lstinputlisting[language=C++]{../src/dlses/Cholesky.h}
+
+\subsubsection*{Процедуру вирішення рівнянь за допомогою замін}
+\lstinputlisting[language=C++]{../src/dlses/Substitution.h}
+
+\subsubsection*{Процедуру образунку коренів лінійної системи рівнянь}
+\lstinputlisting[language=C++]{../src/dlses/Solvers.h}
