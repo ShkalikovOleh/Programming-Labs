@@ -1,72 +1,102 @@
 \section*{\centering Теоретичні відомості}
+У даному комп'ютерному практикумі перед нами
+постає задача знаходження розв'зку системи лінійних
+алгебраїчних рівнянь, яку можна представити у вигляді:
+\begin{equation} \label{eq:linear}
+    Ax = b
+\end{equation}
+,де $A$ - матриця коефіцієнтів системи розмірності $n \times n$,
+$x$ - невідомий вектор розмірності $n$,
+$b$ - вектор правої частини розмірності $n$.
 
-\begin{algorithm}[h]
-    \SetAlgoLined
-    \KwIn{$A$}
-    \For{$i \in \overline{1, n}$}
-    {
-        \For{$j \in \overline{1, n}$}
-        {
-            \If{i = j}
-            {
-                $l_{i, j} \leftarrow \sqrt{a_{i,i} - \sum \limits_{k=1}^{i-1} l_{i, k}^2} $
-            }
-            \Else
-            {
-                $l_{i, j} \leftarrow \dfrac{a_{i, j} - \sum \limits_{k=1}^{i-1} l_{i, k} l_{j, k}}{l_{i, j}} $
-            }
-        }
-    }
-    \KwOut{$L$}
-    \caption{Декомпозиція Холецького}
-    \label{alg:cholesky}
-\end{algorithm}
+\noindent
+Взагалі кажучи, існують декілька ідеї методів, для розв'язання
+цієї задачі. Ми розглянемо так звані прямі методи, для знаходження
+коренів. Якщо матриця $A$ системи \ref{eq:linear} є симетричною, то
+можемо спробувати застосувати так званий метод квадратного кореня.
+Він полягає у тому, щоб застосувати декомпозицію Холецького та представити
+систему у наступному вигляді:
+\begin{equation}
+    Ax = LL^Tx=b
+\end{equation}
+де $L$ - нижньо-трикутна матриця. Отже, маємо:
+\[
+    \begin{pmatrix}
+        a_{11} & \dots & a_{1n} \\
+        \vdots & \ddots & \vdots \\
+        a_{n1} & \dots  & a_{nn}
+    \end{pmatrix} =
+    \begin{pmatrix}
+        a_{11} & &  \\
+        \vdots & \ddots &  \\
+        a_{n1} & \dots  & a_{nn}
+    \end{pmatrix}
+    \begin{pmatrix}
+        a_{11} & \dots & a_{n1} \\
+        & \ddots & \vdots \\
+        & & a_{nn}
+    \end{pmatrix}
+\]
+За правилами множення матриць, отримаємо:
+\begin{equation} \label{alg:cholesky}
+    \begin{gathered}
+        l_{11} = \sqrt{a_{11}} \hspace{1cm}
+        l_{i1} = \frac{a_{i1}}{l_{11}} \; (i > 1) \\
+        l_{ij} = \frac{a_{ij} - \sum \limits_{k=1}^{i-1} l_{ik} l_{jk}}{l_{ij}} \; (1 < j \leq i)
+    \end{gathered}
+\end{equation}
 
-\begin{algorithm}[h]
-    \SetAlgoLined
-    \KwIn{$A$}
-    \For{$i \in \overline{1, n}$}
-    {
-        \For{$j \in \overline{1, n}$}
-        {
-            \If{i = j}
-            {
-                $l_{i, i} \leftarrow 1$ \\
-                $d_{i} \leftarrow a_{i,i} - \sum \limits_{k=1}^{i-1} l_{i, k}^2 l_k $
-            }
-            \Else
-            {
-                $l_{i, j} \leftarrow \dfrac{a_{i, j} - \sum \limits_{k=1}^{i-1} l_{i, k} l_{j, k} d_k}{d_{j}} $
-            }
-        }
-    }
-    \KwOut{$L$}
-    \caption{LDL декомпозиція}
-    \label{alg:ldl}
-\end{algorithm}
-
+\noindent
+Маючи декомпозицію Холецького ми можемо розв'зати
+систему \ref{eq:linear} у два кроки:
+\[
+    Ly = b \hspace{1cm} L^Tx = y
+\]
+Зазначимо, що матриці $L$ та $L^T$ - нижньо- та верхньо-трикутні відповідно,
+тому їх можна розв'язати методами підстановки. Наведемо алгоритми цих методів.
 \begin{algorithm}[h]
     \SetAlgoLined
     \KwIn{$A$, $b$}
-    $x_1 \leftarrow \dfrac{b_1}{a_{1,1}} $ \\
+    $x_1 \leftarrow \dfrac{b_1}{a_{11}} $ \\
     \For{$i \in \overline{2, n}$}
     {
-        $x_i \leftarrow \dfrac{b_i - \sum \limits_{j=1}^{i-1} a_{i, j}x_j}{a_{i,i}}$
+        $x_i \leftarrow \dfrac{b_i - \sum \limits_{j=1}^{i-1} a_{ij}x_j}{a_{ii}}$
     }
     \KwOut{$x$}
     \caption{Пряма підстановка(для нижньо-трикутної матриці)}
     \label{alg:forward}
 \end{algorithm}
 
+\pagebreak
 \begin{algorithm}[h]
     \SetAlgoLined
     \KwIn{$A$, $b$}
-    $x_n \leftarrow \dfrac{b_n}{a_{n,n}} $ \\
+    $x_n \leftarrow \dfrac{b_n}{a_{nn}} $ \\
     \For{$i \in \{n-1, \dots, 1\}$}
     {
-        $x_i \leftarrow \dfrac{b_i - \sum \limits_{j=i+1}^{n} a_{i, j}x_{j}}{a_{i,i}}$
+        $x_i \leftarrow \dfrac{b_i - \sum \limits_{j=i+1}^{n} a_{ij}x_{j}}{a_{ii}}$
     }
     \KwOut{$x$}
     \caption{Зворотна підстановка(для верхньо-трикутної матриці)}
     \label{alg:backward}
 \end{algorithm}
+
+\noindent
+Інколи, застосування операції квадратного кореня значно ускладнене,
+бо може призвести до значних чисельних похибок,
+або підкореневий вираз є від'ємним(і потрібно переходити у комплексну площину).
+Тому можна вдосконалити попередні алгоритми, та представити систему у вигляді:
+\begin{equation}
+    Ax = LDL^Tx=b
+\end{equation}
+де $L$ - нижньо-трикутна матриця з одиницями на діагоналі,
+$D$ - діагональна матриця. За правилами множення матриць, отримаємо:
+\begin{equation} \label{alg:ldl}
+    \begin{gathered}
+        d_{1} = a_{11} \hspace{1cm}
+        l_{ii} = 1 \hspace{1cm}
+        l_{i1} = \frac{a_{i1}}{d_{i}} \; (i>1) \\
+        d_{i} = a_{ii} - \sum \limits_{k=1}^{i-1} l_{ik}^2 d_k \; (i>1) \hspace{1cm}
+        l_{ij} = \dfrac{a_{ij} - \sum \limits_{k=1}^{i-1} l_{ik} l_{jk} d_k}{d_{j}} \; (1<j<i)
+    \end{gathered}
+\end{equation}
