@@ -3,7 +3,9 @@
 
 #include "Matrix.h"
 #include "Vector.h"
+#include "AugmentedMatrix.h"
 #include "Cholesky.h"
+#include "GaussJordan.h"
 #include "Substitution.h"
 
 #ifdef PRINT
@@ -53,5 +55,27 @@ namespace DLSES
 
         auto x = backward(l.transpose(), z);
         return x;
+    }
+
+    template <typename T>
+    Vector<T> gaussJordanSolve(const Matrix<T> &A, const Vector<T> &b)
+    {
+        auto m = A;
+        auto v = b;
+        AugmentedMatrix<T> aug(m, v);
+        for (int i = 0; i < m.nrow(); i++)
+        {
+            DLSES::gaussJordanEliminationStep(aug, i, i);
+
+#ifdef PRINT
+        std::cout << "Gauss Jordan solver. Step: " << i+1 << std::endl;
+        std::cout << "Matrix A: " << std::endl;
+        print(m);
+        std::cout << "Vector b: " << std::endl;
+        print(v);
+#endif
+        }
+
+        return v;
     }
 }

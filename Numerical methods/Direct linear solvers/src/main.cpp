@@ -20,7 +20,7 @@ int main()
     print(mat);
     std::cout << std::endl;
 
-    DLSES::Vector<int> vec(4);
+    DLSES::Vector<double> vec(4);
     vec(0) = 23;
     vec(1) = 32;
     vec(2) = 33;
@@ -32,14 +32,19 @@ int main()
 
     std::cout << std::fixed << std::setprecision(6); //specify precision
 
-    auto xch = choleskySolve(mat, vec);
+    auto xch = DLSES::choleskySolve(mat, vec);
     std::cout << "Roots cholesky" << std::endl;
     print(xch);
     std::cout << std::endl;
 
-    auto xld = ldlSolve(mat, vec);
+    auto xld = DLSES::ldlSolve(mat, vec);
     std::cout << "Roots LDL" << std::endl;
     print(xld);
+    std::cout << std::endl;
+
+    auto xgj = DLSES::gaussJordanSolve(mat, vec);
+    std::cout << "Gauss-Jordan" << std::endl;
+    print(xgj);
     std::cout << std::endl;
 
     DLSES::Vector<double> res = mat * xld - vec;
