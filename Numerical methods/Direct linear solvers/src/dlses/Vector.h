@@ -11,6 +11,15 @@ namespace DLSES
     public:
         Vector(size_t nval) : _buff(nval) {}
 
+        template<typename U>
+        Vector(const Vector<U>& vector) : _buff(vector.nval())
+        {
+            for (size_t i = 0; i < vector.nval(); i++)
+            {
+                _buff[i] = vector(i);
+            }
+        };
+
         inline size_t nval() const noexcept { return _buff.size(); }
 
         T& operator()(size_t i);

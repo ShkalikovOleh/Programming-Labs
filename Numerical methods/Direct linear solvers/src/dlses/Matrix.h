@@ -11,6 +11,18 @@ namespace DLSES
     public:
         Matrix(size_t nrow, size_t ncol);
 
+        template<typename U>
+        Matrix(const Matrix<U>& matrix) : _buff(matrix._buff.size())
+        {
+            for (size_t i = 0; i < matrix.nrow(); i++)
+            {
+                for (size_t j = 0; j < matrix.ncol(); j++)
+                {
+                    _buff[i] = matrix(i, j);
+                }
+            }
+        };
+
         size_t nrow() const noexcept { return _nrow; }
         size_t ncol() const noexcept { return _ncol; }
 

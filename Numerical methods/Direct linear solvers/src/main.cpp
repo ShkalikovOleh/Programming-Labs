@@ -20,7 +20,7 @@ int main()
     print(mat);
     std::cout << std::endl;
 
-    DLSES::Vector<double> vec(4);
+    DLSES::Vector<int> vec(4);
     vec(0) = 23;
     vec(1) = 32;
     vec(2) = 33;

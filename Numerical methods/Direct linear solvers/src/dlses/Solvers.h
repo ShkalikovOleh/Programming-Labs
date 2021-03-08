@@ -57,13 +57,15 @@ namespace DLSES
         return x;
     }
 
-    template <typename T>
-    Vector<T> gaussJordanSolve(const Matrix<T> &A, const Vector<T> &b)
+    template <typename T, typename U>
+    auto gaussJordanSolve(const Matrix<T> &A, const Vector<U> &b)
     {
-        auto m = A;
-        auto v = b;
-        AugmentedMatrix<T> aug(m, v);
-        for (int i = 0; i < m.nrow(); i++)
+        using ret_type = typename std::common_type<T, U>::type;
+        Matrix<ret_type> m(A);
+        Vector<ret_type> v(b);
+        AugmentedMatrix<ret_type> aug(m, v);
+
+        for (size_t i = 0; i < m.nrow(); i++)
         {
             DLSES::gaussJordanEliminationStep(aug, i, i);
 
