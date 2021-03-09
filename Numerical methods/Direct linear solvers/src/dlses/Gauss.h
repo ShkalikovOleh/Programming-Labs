@@ -1,11 +1,9 @@
 #pragma once
 
-#include "AugmentedMatrix.h"
-
 namespace DLSES
 {
     template <typename T>
-    void gaussJordanEliminationStep(AugmentedMatrix<T>& matrix, size_t i, size_t j)
+    void gaussJordanEliminationStep(IMatrix<T>& matrix, size_t i, size_t j)
     {
         for (size_t k = 0; k < matrix.nrow(); k++)
         {
@@ -24,7 +22,7 @@ namespace DLSES
     }
 
     template <typename T>
-    void gaussEliminationStep(AugmentedMatrix<T>& matrix, size_t i, size_t j)
+    void gaussEliminationStep(IMatrix<T>& matrix, size_t i, size_t j)
     {
         for (size_t k = 0; k < matrix.nrow(); k++)
         {

@@ -6,10 +6,59 @@
 namespace DLSES
 {
     template <typename T>
-    class Matrix
+    class IMatrix
     {
     public:
-        Matrix(size_t nrow, size_t ncol);
+        size_t nrow() const noexcept { return _nrow; }
+        size_t ncol() const noexcept { return _ncol; }
+
+        virtual T &operator()(size_t i, size_t j) = 0;
+        virtual const T& operator()(size_t i, size_t j) const = 0;
+
+    protected:
+        size_t _nrow;
+        size_t _ncol;
+    };
+
+    template <typename T>
+    class TransposeView : public IMatrix<T>
+    {
+    public:
+        TransposeView(IMatrix<T> &matrix)
+        {
+            _matrix = &matrix;
+            this->_nrow = matrix.nrow();
+            this->_ncol = matrix.ncol();
+        }
+
+        T &operator()(size_t i, size_t j) override
+        {
+            if (j >= this->_nrow || i >= this->_ncol)
+                throw std::invalid_argument("Position is out of range");
+            return _matrix->operator()(j, i);
+        }
+
+        const T& operator()(size_t i, size_t j) const override
+        {
+            if (j >= this->_nrow || i >= this->_ncol)
+                throw std::invalid_argument("Position is out of range");
+            return _matrix->operator()(j, i);
+        }
+
+
+    private:
+        IMatrix<T>* _matrix;
+    };
+
+    template <typename T>
+    class Matrix : public IMatrix<T>
+    {
+    public:
+        Matrix(size_t nrow, size_t ncol) : _buff(nrow * ncol)
+        {
+            this->_nrow = nrow;
+            this->_ncol = ncol;
+        }
 
         template<typename U>
         Matrix(const Matrix<U>& matrix) : _buff(matrix._buff.size())
@@ -23,76 +72,58 @@ namespace DLSES
             }
         };
 
-        size_t nrow() const noexcept { return _nrow; }
-        size_t ncol() const noexcept { return _ncol; }
+        T &operator()(size_t i, size_t j) override
+        {
+            if (i >= this->_nrow || j >= this->_ncol)
+                throw std::invalid_argument("Position is out of range");
+            return _buff[i * this->_ncol + j];
+        }
 
-        T &operator()(size_t i, size_t j);
-        const T& operator()(size_t i, size_t j) const;
+        const T& operator()(size_t i, size_t j) const override
+        {
+            if (i >= this->_nrow || j >= this->_ncol)
+                throw std::invalid_argument("Position is out of range");
+            return _buff[i * this->_ncol + j];
+        }
 
-        Matrix transpose() const;
-        bool isSymmetric() const noexcept;
+        Matrix<T> transpose()
+        {
+            Matrix<T> result(this->_nrow, this->_ncol);
+
+            for (size_t i = 0; i < this->_nrow; i++)
+            {
+                for (size_t j = 0; j < this->_ncol; j++)
+                {
+                    result(i, j) = operator()(j, i);
+                }
+            }
+
+            return result;
+        }
+
+        bool isSymmetric() const noexcept
+        {
+            if (this->_ncol != this->_nrow)
+            return false;
+
+            for (size_t i = 0; i < this->_nrow; i++)
+            {
+                for (size_t j = 0; j < i; j++)
+                {
+                    if (operator()(i, j) != operator()(j, i))
+                        return false;
+                }
+            }
+
+            return true;
+        }
 
     private:
-        size_t _nrow;
-        size_t _ncol;
         Buffer<T> _buff;
     };
 
-    template <typename T>
-    Matrix<T>::Matrix(size_t nrow, size_t ncol) : _buff(nrow * ncol), _nrow(nrow), _ncol(ncol) {}
-
-    template <typename T>
-    T& Matrix<T>::operator()(size_t i, size_t j)
-    {
-        if (i >= _nrow || j >= _ncol)
-            throw std::invalid_argument("Position is out of range");
-        return _buff[i * _ncol + j];
-    }
-
-    template <typename T>
-    const T& Matrix<T>::operator()(size_t i, size_t j) const
-    {
-        if (i >= _nrow || j >= _ncol)
-            throw std::invalid_argument("Position is out of range");
-        return _buff[i * _ncol + j];
-    }
-
-    template <typename T>
-    Matrix<T> Matrix<T>::transpose() const
-    {
-        Matrix<T> result(_nrow, _ncol);
-
-        for (size_t i = 0; i < _nrow; i++)
-        {
-            for (size_t j = 0; j < _ncol; j++)
-            {
-                result(i, j) = operator()(j, i);
-            }
-        }
-
-        return result;
-    }
-
-    template <typename T>
-    bool Matrix<T>::isSymmetric() const noexcept
-    {
-        if (_ncol != _nrow)
-            return false;
-
-        for (size_t i = 0; i < _nrow; i++)
-        {
-            for (size_t j = 0; j < i; j++)
-            {
-                if (operator()(i, j) != operator()(j, i))
-                    return false;
-            }
-        }
-
-        return true;
-    }
-
     template <typename T, typename U>
-    auto operator*(const DLSES::Matrix<T> &rhs, const DLSES::Matrix<U> &lhs)
+    auto operator*(const IMatrix<T> &rhs, const IMatrix<U> &lhs)
     {
         if (rhs.ncol() != lhs.nrow())
             throw std::invalid_argument("Number of column != number of row");
@@ -114,7 +145,7 @@ namespace DLSES
     }
 
     template <typename T, typename U>
-    auto operator*(const Matrix<T> &matrix, const Vector<U> &vector)
+    auto operator*(const IMatrix<T> &matrix, const Vector<U> &vector)
     {
         if (matrix.ncol() != vector.nval())
             throw std::invalid_argument("Number of column != size of vector");

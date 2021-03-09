@@ -30,25 +30,41 @@ int main()
     print(vec);
     std::cout << std::endl;
 
-    std::cout << std::fixed << std::setprecision(6); //specify precision
+    std::cout << std::setprecision(16); //specify precision
 
     auto xch = DLSES::choleskySolve(mat, vec);
     std::cout << "Roots cholesky" << std::endl;
     print(xch);
+
+    auto res = mat * xch - vec;
+    std::cout << "Cholesky Check" << std::endl;
+    print(res);
     std::cout << std::endl;
 
     auto xld = DLSES::ldlSolve(mat, vec);
     std::cout << "Roots LDL" << std::endl;
     print(xld);
+
+    res = mat * xld - vec;
+    std::cout << "LDL Chech" << std::endl;
+    print(res);
     std::cout << std::endl;
 
     auto xgj = DLSES::gaussJordanSolve(mat, vec);
     std::cout << "Gauss-Jordan" << std::endl;
     print(xgj);
+
+    res = mat * xgj - vec;
+    std::cout << "Gauss Jordan Check" << std::endl;
+    print(res);
     std::cout << std::endl;
 
-    DLSES::Vector<double> res = mat * xld - vec;
-    std::cout << "A*x - b" << std::endl;
+    auto xgp = DLSES::gaussPivotSolve(mat, vec);
+    std::cout << "Gauss with pivot" << std::endl;
+    print(xgp);
+
+    res = mat * xgp - vec;
+    std::cout << "Gauss with pivot Check" << std::endl;
     print(res);
 
     return 0;

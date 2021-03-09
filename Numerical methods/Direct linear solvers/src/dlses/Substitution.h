@@ -6,7 +6,7 @@
 namespace DLSES
 {
     template <typename T, typename U>
-    auto forward(const Matrix<T> &A, const Vector<U> &b)
+    auto forward(const IMatrix<T> &A, const Vector<U> &b)
     {
         if (A.nrow() != b.nval() || A.ncol() != b.nval())
             throw std::invalid_argument("Invalid sizes");
@@ -27,10 +27,10 @@ namespace DLSES
     }
 
     template <typename T, typename U>
-    auto backward(const Matrix<T> &A, const Vector<U> &b)
+    auto backward(const IMatrix<T> &A, const Vector<U> &b)
     {
-        if (A.nrow() != b.nval() || A.ncol() != b.nval())
-            throw std::invalid_argument("Invalid sizes");
+        // if (A.nrow() != b.nval() || A.ncol() != b.nval())
+        //     throw std::invalid_argument("Invalid sizes");
 
         Vector<typename std::common_type<T, U>::type> x(b.nval());
 

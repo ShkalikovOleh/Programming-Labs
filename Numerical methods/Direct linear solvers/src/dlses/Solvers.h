@@ -3,7 +3,7 @@
 
 #include "Matrix.h"
 #include "Vector.h"
-#include "AugmentedMatrix.h"
+#include "MatrixView.h"
 #include "Cholesky.h"
 #include "Gauss.h"
 #include "Substitution.h"
@@ -19,7 +19,7 @@ namespace DLSES
         {
                 auto chol = cholesky(A);
                 auto y = forward(chol, b);
-                auto x = backward(chol.transpose(), y);
+                auto x = backward(TransposeView(chol), y);
 
 #ifdef PRINT
                 std::cout << "Cholesky solver y" << std::endl;
@@ -53,7 +53,7 @@ namespace DLSES
                 std::cout << std::endl;
 #endif
 
-                auto x = backward(l.transpose(), z);
+                auto x = backward(TransposeView(l), z);
                 return x;
         }
 
@@ -63,7 +63,7 @@ namespace DLSES
                 using ret_type = typename std::common_type<T, U>::type;
                 Matrix<ret_type> m(A);
                 Vector<ret_type> v(b);
-                AugmentedMatrix<ret_type> aug(m, v);
+                MatrixVectorView<ret_type> aug(m, v);
 
                 for (size_t i = 0; i < m.nrow(); i++)
                 {
@@ -87,15 +87,25 @@ namespace DLSES
                 using ret_type = typename std::common_type<T, U>::type;
                 Matrix<ret_type> m(A);
                 Vector<ret_type> v(b);
-                AugmentedMatrix<ret_type> aug(m, v);
-                aug.swapRow(0, 3);
+                MatrixVectorView<ret_type> aug(m, v);
 
                 for (size_t i = 0; i < m.nrow(); i++)
                 {
+                        auto max = i;
+                        for (size_t l = i + 1; l < m.nrow(); l++)
+                        {
+                            if (std::abs(aug(l, i)) > std::abs(aug(max, i)))
+                                max = l;
+                        }
+                        if (max != i)
+                        {
+                            aug.swapRows(i, max);
+                        }
+
                         DLSES::gaussEliminationStep(aug, i, i);
 
 #ifdef PRINT
-                        std::cout << "Gauss Jordan solver. Step: " << i + 1 << std::endl;
+                        std::cout << "Gauss with pivoting solver. Step: " << i + 1 << std::endl;
                         std::cout << "Matrix A: " << std::endl;
                         print(m);
                         std::cout << "Vector b: " << std::endl;
@@ -103,7 +113,13 @@ namespace DLSES
 #endif
                 }
 
-                auto x = backward(m, v);
-                return x;
+                backward(aug, b);
+
+                Vector<ret_type> res(b.nval());
+                for (size_t k = 0; k < b.nval(); k++)
+                {
+                        res(k) = v(aug.getRow(k));
+                }
+                return res;
         }
 }

@@ -1,7 +1,8 @@
 #pragma once
 
+#include <cmath>
 #include "Matrix.h"
-#include "AugmentedMatrix.h"
+#include "MatrixView.h"
 #include "Gauss.h"
 
 namespace DLSES
@@ -18,18 +19,17 @@ namespace DLSES
     }
 
     template <typename T>
-    Matrix<T> inverse(const Matrix<T> &matrix)
+    Matrix<T> inverse(Matrix<T> matrix)
     {
         if (matrix.nrow() != matrix.ncol())
             throw std::invalid_argument("Non quadratic matrix");
 
-        auto m = matrix;
         auto inv = eye<T>(matrix.nrow());
-        AugmentedMatrix<T> aug(m, inv);
+        MatrixMatrixView<T> aug(matrix, inv);
 
         for (size_t i = 0; i < matrix.nrow(); i++)
         {
-            if (m(i, i) == 0)
+            if (matrix(i, i) == 0)
                 throw std::invalid_argument("Non invertable matrix");
 
             gaussJordanEliminationStep(aug, i, i);
@@ -39,13 +39,12 @@ namespace DLSES
     }
 
     template <typename T>
-    T det(const Matrix<T> &matrix)
+    T det(Matrix<T> matrix)
     {
         if (matrix.nrow() != matrix.ncol())
             throw std::invalid_argument("Non quadratic matrix");
 
-        auto m = matrix;
-        AugmentedMatrix<T> aug(m);
+        MatrixView<T> aug(matrix);
         T det = 1;
 
         for (size_t i = 0; i < matrix.nrow() - 1; i++)
@@ -53,12 +52,12 @@ namespace DLSES
             auto max = i;
             for (size_t m = i + 1; m < matrix.nrow(); m++)
             {
-                if (aug(m, i) > aug(max, i))
-                    max = i;
+                if (std::abs(aug(m, i)) > std::abs(aug(max, i)))
+                    max = m;
             }
             if (max != i)
             {
-                aug.swapRow(i, max);
+                aug.swapRows(i, max);
                 det = -1 * det;
             }
 
@@ -69,7 +68,7 @@ namespace DLSES
 
             gaussEliminationStep(aug, i, i);
         }
-        det = det * aug(m.nrow() - 1, m.nrow() - 1);
+        det = det * aug(matrix.nrow() - 1, matrix.nrow() - 1);
 
         return det;
     }
