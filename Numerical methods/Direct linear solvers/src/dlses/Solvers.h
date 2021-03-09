@@ -82,6 +82,32 @@ namespace DLSES
         }
 
         template <typename T, typename U>
+        auto gaussSolve(const Matrix<T> &A, const Vector<U> &b)
+        {
+                using ret_type = typename std::common_type<T, U>::type;
+                Matrix<ret_type> m(A);
+                Vector<ret_type> v(b);
+                MatrixVectorView<ret_type> aug(m, v);
+
+                for (size_t i = 0; i < m.nrow(); i++)
+                {
+                        DLSES::gaussEliminationStep(aug, i, i);
+
+#ifdef PRINT
+                        std::cout << "Gauss solver. Step: " << i + 1 << std::endl;
+                        std::cout << "Matrix A: " << std::endl;
+                        print(m);
+                        std::cout << "Vector b: " << std::endl;
+                        print(v);
+#endif
+                }
+
+                auto x = backward(m, v);
+
+                return x;
+        }
+
+        template <typename T, typename U>
         auto gaussPivotSolve(const Matrix<T> &A, const Vector<U> &b)
         {
                 using ret_type = typename std::common_type<T, U>::type;
@@ -113,13 +139,19 @@ namespace DLSES
 #endif
                 }
 
-                backward(aug, b);
-
+                size_t i = A.nrow();
                 Vector<ret_type> res(b.nval());
-                for (size_t k = 0; k < b.nval(); k++)
+                do
                 {
-                        res(k) = v(aug.getRow(k));
-                }
+                    i--;
+                    T sum = 0;
+                    for (size_t j = i + 1; j < A.nrow(); j++)
+                    {
+                        sum += aug(i, j) * res(j);
+                    }
+                    res(i) = (aug(i, A.ncol()) - sum) / aug(i, i);
+                } while (i != 0);
+
                 return res;
         }
 }

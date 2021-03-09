@@ -1,6 +1,8 @@
 #include <iostream>
 #include <iomanip>
 
+// #define PRINT
+
 #include "Matrix.h"
 #include "Vector.h"
 #include "Solvers.h"
@@ -37,8 +39,8 @@ int main()
     print(xch);
 
     auto res = mat * xch - vec;
-    std::cout << "Cholesky Check" << std::endl;
-    print(res);
+    std::cout << "Cholesky res" << std::endl;
+    printAbs(res);
     std::cout << std::endl;
 
     auto xld = DLSES::ldlSolve(mat, vec);
@@ -46,8 +48,8 @@ int main()
     print(xld);
 
     res = mat * xld - vec;
-    std::cout << "LDL Chech" << std::endl;
-    print(res);
+    std::cout << "LDL res" << std::endl;
+    printAbs(res);
     std::cout << std::endl;
 
     auto xgj = DLSES::gaussJordanSolve(mat, vec);
@@ -55,8 +57,17 @@ int main()
     print(xgj);
 
     res = mat * xgj - vec;
-    std::cout << "Gauss Jordan Check" << std::endl;
-    print(res);
+    std::cout << "Gauss Jordan res" << std::endl;
+    printAbs(res);
+    std::cout << std::endl;
+
+    auto xg = DLSES::gaussSolve(mat, vec);
+    std::cout << "Gauss" << std::endl;
+    print(xg);
+
+    res = mat * xg - vec;
+    std::cout << "Gauss res" << std::endl;
+    printAbs(res);
     std::cout << std::endl;
 
     auto xgp = DLSES::gaussPivotSolve(mat, vec);
@@ -64,8 +75,8 @@ int main()
     print(xgp);
 
     res = mat * xgp - vec;
-    std::cout << "Gauss with pivot Check" << std::endl;
-    print(res);
+    std::cout << "Gauss with pivot res" << std::endl;
+    printAbs(res);
 
     return 0;
 }

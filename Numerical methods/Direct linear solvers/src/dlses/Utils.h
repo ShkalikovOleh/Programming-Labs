@@ -1,5 +1,7 @@
 #pragma once
 
+#include <cmath>
+
 #include "Matrix.h"
 #include "Vector.h"
 
@@ -25,6 +27,16 @@ namespace DLSES
         for (size_t i = 0; i < vector.nval(); i++)
         {
             std::cout << vector(i) << "\t";
+        }
+        std::cout << std::endl;
+    }
+
+    template <typename T>
+    void printAbs(const Vector<T> &vector)
+    {
+        for (size_t i = 0; i < vector.nval(); i++)
+        {
+            std::cout << std::abs(vector(i)) << "\t";
         }
         std::cout << std::endl;
     }
@@ -55,6 +67,17 @@ namespace DLSES
         for (size_t i = 0; i < vector.nval() - 1; i++)
         {
             std::cout << vector(i) << " \\\\ ";
+        }
+        std::cout << vector(vector.nval() - 1) << std::endl << "\\end{pmatrix}";
+    }
+
+    template <typename T>
+    void printAbs(const Vector<T> &vector)
+    {
+        std::cout << "\\begin{pmatrix}" << std::endl << "\t";;
+        for (size_t i = 0; i < vector.nval() - 1; i++)
+        {
+            std::cout << std::abs(vector(i)) << " \\\\ ";
         }
         std::cout << vector(vector.nval() - 1) << std::endl << "\\end{pmatrix}";
     }

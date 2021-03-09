@@ -17,7 +17,7 @@ int main()
     print(mat);
     std::cout << std::endl;
 
-    std::cout << std::fixed << std::setprecision(6); //specify precision
+    std::cout << std::setprecision(6); //specify precision
 
     auto inv = DLSES::inverse(mat);
     std::cout << "Inverse" << std::endl;
