@@ -2,7 +2,7 @@
 
 #include "Matrix.h"
 #include "AugmentedMatrix.h"
-#include "GaussJordan.h"
+#include "Gauss.h"
 
 namespace DLSES
 {
@@ -50,14 +50,26 @@ namespace DLSES
 
         for (size_t i = 0; i < matrix.nrow() - 1; i++)
         {
-            det = det * m(i, i);
+            auto max = i;
+            for (size_t m = i + 1; m < matrix.nrow(); m++)
+            {
+                if (aug(m, i) > aug(max, i))
+                    max = i;
+            }
+            if (max != i)
+            {
+                aug.swapRow(i, max);
+                det = -1 * det;
+            }
+
+            det = det * aug(i, i);
 
             if (det == 0)
                 return 0;
 
-            gaussJordanEliminationStep(aug, i, i);
+            gaussEliminationStep(aug, i, i);
         }
-        det = det * m(m.nrow() - 1, m.nrow() - 1);
+        det = det * aug(m.nrow() - 1, m.nrow() - 1);
 
         return det;
     }

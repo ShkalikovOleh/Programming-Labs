@@ -1,5 +1,7 @@
 #pragma once
 
+#include <unordered_map>
+
 #include "Vector.h"
 #include "Matrix.h"
 
@@ -40,6 +42,12 @@ namespace DLSES
             if (j >= ncol())
                 throw std::invalid_argument("Position is out of range");
 
+            auto it =_rowPermutation.find(i);
+            if (it != _rowPermutation.end())
+            {
+                i = it->second;
+            }
+
             if (j >= _matrix->ncol())
             {
                 switch (_type)
@@ -60,6 +68,12 @@ namespace DLSES
         {
             if (j >= ncol())
                 throw std::invalid_argument("Position is out of range");
+
+            auto it =_rowPermutation.find(i);
+            if (it != _rowPermutation.end())
+            {
+                i = it->second;
+            }
 
             if (j >= _matrix->ncol())
             {
@@ -96,6 +110,12 @@ namespace DLSES
             return ncol;
         }
 
+        void swapRow(size_t i, size_t j)
+        {
+            _rowPermutation.insert(std::make_pair(i, j));
+            _rowPermutation.insert(std::make_pair(j, i));
+        }
+
     private:
         enum AugType
         {
@@ -104,6 +124,7 @@ namespace DLSES
             VectorAug
         } _type;
 
+        std::unordered_map<size_t, size_t> _rowPermutation;
         void* _augm;
         Matrix<T>* _matrix;
     };
